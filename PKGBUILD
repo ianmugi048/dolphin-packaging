@@ -5,7 +5,7 @@
 
 pkgname=dolphin
 pkgver=16.04.0
-pkgrel=1
+pkgrel=2
 pkgdesc="File Manager"
 arch=(i686 x86_64)
 url="http://kde.org/applications/system/dolphin/"
@@ -19,7 +19,6 @@ conflicts=('kdebase-dolphin<15.08')
 replaces=(kdebase-dolphin)
 groups=(kde-applications kdebase)
 source=("http://download.kde.org/stable/applications/$pkgver/src/$pkgname-$pkgver.tar.xz")
-install=$pkgname.install
 md5sums=('1d1ebbe0b914ca02f22b465f829268b7')
 
 prepare() {
