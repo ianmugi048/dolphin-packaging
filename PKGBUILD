@@ -4,7 +4,7 @@
 # Contributor: Pierre Schmitz <pierre@archlinux.de>
 
 pkgname=dolphin
-pkgver=16.08.1
+pkgver=16.08.2
 pkgrel=1
 pkgdesc="File Manager"
 arch=(i686 x86_64)
@@ -19,7 +19,7 @@ conflicts=('kdebase-dolphin<15.08')
 replaces=(kdebase-dolphin)
 groups=(kde-applications kdebase)
 source=("http://download.kde.org/stable/applications/$pkgver/src/$pkgname-$pkgver.tar.xz")
-md5sums=('5ad19278b4f9d74781bbd6331c17d876')
+md5sums=('2d986a57f77ee8664e2eb7d19e8be624')
 
 prepare() {
   mkdir -p build
