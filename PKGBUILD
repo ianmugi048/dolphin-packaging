@@ -10,10 +10,10 @@ pkgdesc='KDE File Manager'
 arch=(x86_64)
 url='https://apps.kde.org/dolphin/'
 license=(LGPL)
-depends=(baloo-widgets knewstuff kio-extras kcmutils kparts kactivities kuserfeedback)
-makedepends=(extra-cmake-modules kdoctools)
+depends=(baloo-widgets knewstuff5 kio-extras kcmutils5 kparts5 kactivities5 kuserfeedback)
+makedepends=(extra-cmake-modules kdoctools5)
 optdepends=('kde-cli-tools: for editing file type options' 'ffmpegthumbs: video thumbnails' 'kdegraphics-thumbnailers: PDF and PS thumbnails'
-            'konsole: terminal panel' 'purpose: share context menu'
+            'konsole: terminal panel' 'purpose5: share context menu'
             'kio-admin: for managing files as administrator')
 groups=(kde-applications kde-system)
 source=(https://download.kde.org/stable/release-service/$pkgver/src/$pkgname-$pkgver.tar.xz{,.sig})
