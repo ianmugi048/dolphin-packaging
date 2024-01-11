@@ -4,20 +4,58 @@
 # Contributor: Pierre Schmitz <pierre@archlinux.de>
 
 pkgname=dolphin
-pkgver=23.08.4
+pkgver=24.01.90
 pkgrel=1
 pkgdesc='KDE File Manager'
 arch=(x86_64)
 url='https://apps.kde.org/dolphin/'
 license=(LGPL)
-depends=(baloo-widgets knewstuff5 kio-extras kcmutils5 kparts5 kactivities5 kuserfeedback5)
-makedepends=(extra-cmake-modules kdoctools5)
-optdepends=('kde-cli-tools: for editing file type options' 'ffmpegthumbs: video thumbnails' 'kdegraphics-thumbnailers: PDF and PS thumbnails'
-            'konsole: terminal panel' 'purpose5: share context menu'
-            'kio-admin: for managing files as administrator')
-groups=(kde-applications kde-system)
-source=(https://download.kde.org/stable/release-service/$pkgver/src/$pkgname-$pkgver.tar.xz{,.sig})
-sha256sums=('6a630b78018f3344b70131ff2c9deaae5e626295e512ce2741958d5197888585'
+depends=(baloo
+         baloo-widgets
+         gcc-libs
+         glibc
+         kbookmarks
+         kcmutils
+         kcodecs
+         kcolorscheme
+         kcompletion
+         kconfig
+         kconfigwidgets
+         kcoreaddons
+         kcrash
+         kdbusaddons
+         kfilemetadata
+         ki18n
+         kiconthemes
+         kio
+         kio-extras
+         kjobwidgets
+         knewstuff
+         knotifications
+         kparts
+         kservice
+         ktextwidgets
+         kuserfeedback
+         kwidgetsaddons
+         kwindowsystem
+         kxmlgui
+         phonon-qt6
+         plasma-activities
+         qt6-base
+         solid)
+makedepends=(extra-cmake-modules
+             kdoctools)
+optdepends=('ffmpegthumbs: video thumbnails'
+            'kde-cli-tools: for editing file type options'
+            'kdegraphics-thumbnailers: PDF and PS thumbnails'
+            'kio-admin: for managing files as administrator' 
+            'konsole: terminal panel'
+            'kio-admin: for managing files as administrator'
+            'purpose: share context menu')
+groups=(kde-applications
+        kde-system)
+source=(https://download.kde.org/unstable/release-service/$pkgver/src/$pkgname-$pkgver.tar.xz{,.sig})
+sha256sums=('f524cd10c52c4a6a7b52278d787bc1a8254cb9d0eb28d333096fa88597cbdbe1'
             'SKIP')
 validpgpkeys=(CA262C6C83DE4D2FB28A332A3A6A4DB839EAA6D7  # Albert Astals Cid <aacid@kde.org>
               F23275E4BF10AFC1DF6914A6DBD2CE893E2D1C87  # Christoph Feck <cfeck@kde.org>
