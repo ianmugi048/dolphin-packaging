@@ -4,8 +4,8 @@
 # Contributor: Pierre Schmitz <pierre@archlinux.de>
 
 pkgname=dolphin
-pkgver=24.02.2
-pkgrel=2
+pkgver=24.04.80
+pkgrel=1
 pkgdesc='KDE File Manager'
 arch=(x86_64)
 url='https://apps.kde.org/dolphin/'
@@ -54,18 +54,12 @@ optdepends=('ffmpegthumbs: video thumbnails'
             'purpose: share context menu')
 groups=(kde-applications
         kde-system)
-source=(https://download.kde.org/stable/release-service/$pkgver/src/$pkgname-$pkgver.tar.xz{,.sig}
-        https://invent.kde.org/system/dolphin/-/commit/a07f2422.patch)
-sha256sums=('50844490d45159ca16c1d8d9f5f0701f118772e4b09adad270835b67bb26a701'
-            'SKIP'
-            '9a0d799832323ca78be78189fcd569b6911f0d024dda6b9429312ebcea4bc22e')
+source=(https://download.kde.org/unstable/release-service/$pkgver/src/$pkgname-$pkgver.tar.xz{,.sig})
+sha256sums=('48a9ce26d9b9666ce1c30f06c3ca58f24ddb97af7bc038fb549618a47e30904b'
+            'SKIP')
 validpgpkeys=(CA262C6C83DE4D2FB28A332A3A6A4DB839EAA6D7  # Albert Astals Cid <aacid@kde.org>
               F23275E4BF10AFC1DF6914A6DBD2CE893E2D1C87  # Christoph Feck <cfeck@kde.org>
               D81C0CB38EB725EF6691C385BB463350D6EF31EF) # Heiko Becker <heiko.becker@kde.org>
-
-prepare() {
-  patch -d $pkgname-$pkgver -p1 < a07f2422.patch # Fix crash when entering selection mode
-}
 
 build() {
   cmake -B build -S $pkgname-$pkgver \
