@@ -50,7 +50,6 @@ optdepends=('ffmpegthumbs: video thumbnails'
             'kdegraphics-thumbnailers: PDF and PS thumbnails'
             'kio-admin: for managing files as administrator' 
             'konsole: terminal panel'
-            'kio-admin: for managing files as administrator'
             'purpose: share context menu')
 groups=(kde-applications
         kde-system)
