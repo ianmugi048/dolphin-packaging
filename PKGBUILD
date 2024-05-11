@@ -48,6 +48,7 @@ makedepends=(extra-cmake-modules
 optdepends=('ffmpegthumbs: video thumbnails'
             'kde-cli-tools: for editing file type options'
             'kdegraphics-thumbnailers: PDF and PS thumbnails'
+            'kdenetwork-filesharing: samba usershare properties menu'
             'kio-admin: for managing files as administrator' 
             'konsole: terminal panel'
             'purpose: share context menu')
