@@ -1,6 +1,6 @@
 pkgbase = dolphin
 	pkgdesc = KDE File Manager
-	pkgver = 24.04.90
+	pkgver = 24.05.0
 	pkgrel = 1
 	url = https://apps.kde.org/dolphin/
 	arch = x86_64
@@ -48,12 +48,12 @@ pkgbase = dolphin
 	optdepends = kio-admin: for managing files as administrator
 	optdepends = konsole: terminal panel
 	optdepends = purpose: share context menu
-	source = https://download.kde.org/unstable/release-service/24.04.90/src/dolphin-24.04.90.tar.xz
-	source = https://download.kde.org/unstable/release-service/24.04.90/src/dolphin-24.04.90.tar.xz.sig
+	source = https://download.kde.org/stable/release-service/24.05.0/src/dolphin-24.05.0.tar.xz
+	source = https://download.kde.org/stable/release-service/24.05.0/src/dolphin-24.05.0.tar.xz.sig
 	validpgpkeys = CA262C6C83DE4D2FB28A332A3A6A4DB839EAA6D7
 	validpgpkeys = F23275E4BF10AFC1DF6914A6DBD2CE893E2D1C87
 	validpgpkeys = D81C0CB38EB725EF6691C385BB463350D6EF31EF
-	sha256sums = fa56c186b86c1d38f1b7e0272b386f37fa4c0c7c2187f36a5a9eb8f643734e36
+	sha256sums = e009ce734355481a08ffff13e6f6a7db8b6b74fa320030b35d9180a1d9ca0794
 	sha256sums = SKIP
 
 pkgname = dolphin
