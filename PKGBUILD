@@ -40,7 +40,6 @@ depends=(baloo
          kwindowsystem
          kxmlgui
          phonon-qt6
-         plasma-activities
          qt6-base
          solid)
 makedepends=(extra-cmake-modules
