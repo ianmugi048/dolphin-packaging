@@ -1,7 +1,7 @@
 pkgbase = dolphin
 	pkgdesc = KDE File Manager
 	pkgver = 25.04.0
-	pkgrel = 1
+	pkgrel = 2
 	url = https://apps.kde.org/dolphin/
 	arch = x86_64
 	groups = kde-applications
