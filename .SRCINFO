@@ -42,6 +42,7 @@ pkgbase = dolphin
 	depends = qt6-base
 	depends = qt6-multimedia
 	depends = solid
+	optdepends = dolphin-plugins: extra plugins
 	optdepends = ffmpegthumbs: video thumbnails
 	optdepends = filelight: detailed disk usage statistics
 	optdepends = kde-cli-tools: for editing file type options

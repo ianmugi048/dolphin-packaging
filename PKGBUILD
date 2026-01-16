@@ -45,7 +45,8 @@ depends=(baloo
          solid)
 makedepends=(extra-cmake-modules
              kdoctools)
-optdepends=('ffmpegthumbs: video thumbnails'
+optdepends=('dolphin-plugins: extra plugins'
+            'ffmpegthumbs: video thumbnails'
             'filelight: detailed disk usage statistics'
             'kde-cli-tools: for editing file type options'
             'kdegraphics-thumbnailers: PDF and PS thumbnails'
