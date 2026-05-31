@@ -12,7 +12,6 @@ url='https://apps.kde.org/dolphin/'
 license=(LGPL-2.0-or-later)
 depends=(baloo
          baloo-widgets
-         gcc-libs
          glibc
          kbookmarks
          kcmutils
@@ -40,6 +39,7 @@ depends=(baloo
          kwidgetsaddons
          kwindowsystem
          kxmlgui
+         libstdc++
          qt6-base
          qt6-multimedia
          solid)
