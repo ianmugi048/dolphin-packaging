@@ -1,0 +1,398 @@
+diff --color -ruN -x build -x .git /tmp/pristine/.clang-format source/.clang-format
+--- /tmp/pristine/.clang-format	1970-01-01 03:00:00.000000000 +0300
++++ source/.clang-format	2026-11-26 16:09:15.448330785 +0300
+@@ -0,0 +1,95 @@
++---
++# SPDX-FileCopyrightText: 2019 Christoph Cullmann <cullmann@kde.org>
++# SPDX-FileCopyrightText: 2019 Gernot Gebhard <gebhard@absint.com>
++#
++# SPDX-License-Identifier: MIT
++
++# This file got automatically created by ECM, do not edit
++# See https://clang.llvm.org/docs/ClangFormatStyleOptions.html for the config options
++# and https://community.kde.org/Policies/Frameworks_Coding_Style#Clang-format_automatic_code_formatting
++# for clang-format tips & tricks
++---
++Language: JavaScript
++DisableFormat: true
++---
++Language: Json
++DisableFormat: false
++IndentWidth: 4
++---
++
++# Style for C++
++Language: Cpp
++
++# base is WebKit coding style: https://webkit.org/code-style-guidelines/
++# below are only things set that diverge from this style!
++BasedOnStyle: WebKit
++
++# enforce C++11 (e.g. for std::vector<std::vector<lala>>
++Standard: Cpp11
++
++# 4 spaces indent
++TabWidth: 4
++
++# 2 * 80 wide lines
++ColumnLimit: 160
++
++# sort includes inside line separated groups
++SortIncludes: true
++
++# break before braces on function, namespace and class definitions.
++BreakBeforeBraces: Linux
++
++# CrlInstruction *a;
++PointerAlignment: Right
++
++# horizontally aligns arguments after an open bracket.
++AlignAfterOpenBracket: Align
++
++# don't move all parameters to new line
++AllowAllParametersOfDeclarationOnNextLine: false
++
++# no single line functions
++AllowShortFunctionsOnASingleLine: None
++
++# no single line enums
++AllowShortEnumsOnASingleLine: false
++
++# always break before you encounter multi line strings
++AlwaysBreakBeforeMultilineStrings: true
++
++# don't move arguments to own lines if they are not all on the same
++BinPackArguments: false
++
++# don't move parameters to own lines if they are not all on the same
++BinPackParameters: false
++
++# In case we have an if statement with multiple lines the operator should be at the beginning of the line
++# but we do not want to break assignments
++BreakBeforeBinaryOperators: NonAssignment
++
++# format C++11 braced lists like function calls
++Cpp11BracedListStyle: true
++
++# do not put a space before C++11 braced lists
++SpaceBeforeCpp11BracedList: false
++
++# remove empty lines
++KeepEmptyLinesAtTheStartOfBlocks: false
++
++# no namespace indentation to keep indent level low
++NamespaceIndentation: None
++
++# we use template< without space.
++SpaceAfterTemplateKeyword: false
++
++# Always break after template declaration
++AlwaysBreakTemplateDeclarations: true
++
++# macros for which the opening brace stays attached.
++ForEachMacros: [ foreach, Q_FOREACH, BOOST_FOREACH, forever, Q_FOREVER, QBENCHMARK, QBENCHMARK_ONCE , wl_resource_for_each, wl_resource_for_each_safe ]
++
++# keep lambda formatting multi-line if not empty
++AllowShortLambdasOnASingleLine: Empty
++
++# We do not want clang-format to put all arguments on a new line
++AllowAllArgumentsOnNextLine: false
+diff --color -ruN -x build -x .git /tmp/pristine/src/kitemviews/kfileitemlistwidget.cpp source/src/kitemviews/kfileitemlistwidget.cpp
+--- /tmp/pristine/src/kitemviews/kfileitemlistwidget.cpp	2026-11-03 06:53:13.000000000 +0300
++++ source/src/kitemviews/kfileitemlistwidget.cpp	2026-11-26 17:06:51.125468844 +0300
+@@ -17,6 +17,9 @@
+ #include <QGraphicsScene>
+ #include <QGraphicsView>
+ #include <QMimeDatabase>
++#include <QColor>
++#include <QFileInfo>
++#include <QMimeType>
+ 
+ KFileItemListWidgetInformant::KFileItemListWidgetInformant()
+     : KStandardItemListWidgetInformant()
+@@ -158,6 +161,134 @@
+     return font;
+ }
+ 
++QPair<QColor, QColor> KFileItemListWidget::mimeCategoryColors() const
++{
++    const QHash<QByteArray, QVariant> values = data();
++
++    const QPair<QColor, QColor> directory{QColor("#B58A42"), QColor("#FFE08A")};
++    const QPair<QColor, QColor> script{QColor("#8F70B8"), QColor("#D9B8FF")};
++    const QPair<QColor, QColor> executable{QColor("#B83D3D"), QColor("#FF7A7A")};
++    const QPair<QColor, QColor> archive{QColor("#B97848"), QColor("#FFB98A")};
++    const QPair<QColor, QColor> document{QColor("#438D9A"), QColor("#8FEBFF")};
++    const QPair<QColor, QColor> image{QColor("#B76580"), QColor("#FFA8C6")};
++    const QPair<QColor, QColor> config{QColor("#7A8FA6"), QColor("#9CC4F0")};
++    const QPair<QColor, QColor> backup{QColor("#8A8F98"), QColor("#C3C9D4")};
++    const QPair<QColor, QColor> audio{QColor("#5FA37A"), QColor("#7DEFA6")};
++    const QPair<QColor, QColor> video{QColor("#B0568F"), QColor("#FF7AC8")};
++    const QPair<QColor, QColor> code{QColor("#6FA0C8"), QColor("#7CCBFF")};
++    const QPair<QColor, QColor> text{QColor("#B8A98A"), QColor("#F2E3BC")};
++    const QPair<QColor, QColor> binaryData{QColor("#8F8FD0"), QColor("#B4B4FF")};
++
++    if (values.value("isDir").toBool()) {
++        return directory;
++    }
++
++    // Extension overrides take precedence over MIME classification.
++    static const QHash<QString, QPair<QColor, QColor>> extensionOverrides = {
++        {QStringLiteral("py"), script},
++        {QStringLiteral("sh"), script},
++        {QStringLiteral("md"), document},
++        {QStringLiteral("bak"), backup},
++        {QStringLiteral("orig"), backup},
++        {QStringLiteral("old"), backup},
++        {QStringLiteral("tmp"), backup},
++        {QStringLiteral("swp"), backup},
++        {QStringLiteral("rej"), backup},
++        {QStringLiteral("conf"), config},
++        {QStringLiteral("cfg"), config},
++        {QStringLiteral("ini"), config},
++        {QStringLiteral("toml"), config},
++        {QStringLiteral("yaml"), config},
++        {QStringLiteral("yml"), config},
++        {QStringLiteral("json"), config},
++        {QStringLiteral("xml"), config},
++        {QStringLiteral("desktop"), config},
++        {QStringLiteral("service"), config},
++        {QStringLiteral("c"), code},
++        {QStringLiteral("h"), code},
++        {QStringLiteral("cpp"), code},
++        {QStringLiteral("rs"), code},
++        {QStringLiteral("go"), code},
++        {QStringLiteral("js"), code},
++        {QStringLiteral("ts"), code},
++        {QStringLiteral("java"), code},
++        {QStringLiteral("kt"), code},
++        {QStringLiteral("css"), code},
++        {QStringLiteral("html"), code},
++        {QStringLiteral("php"), code},
++        {QStringLiteral("txt"), text},
++        {QStringLiteral("log"), text},
++        {QStringLiteral("csv"), text},
++        {QStringLiteral("tsv"), text},
++        {QStringLiteral("iso"), archive},
++        {QStringLiteral("img"), archive},
++        {QStringLiteral("deb"), archive},
++        {QStringLiteral("rpm"), archive},
++        {QStringLiteral("apk"), archive},
++        {QStringLiteral("jar"), archive},
++    };
++
++    const QString suffix = QFileInfo(values.value("text").toString()).suffix().toLower();
++    const auto override = extensionOverrides.constFind(suffix);
++    if (override != extensionOverrides.constEnd()) {
++        return override.value();
++    }
++
++    const QString mimeName = values.value("mimeType").toString();
++    if (mimeName.isEmpty()) {
++        return {};
++    }
++
++    const QMimeType mime = QMimeDatabase().mimeTypeForName(mimeName);
++    if (!mime.isValid()) {
++        return {};
++    }
++
++    const auto inheritsAny = [&mime](std::initializer_list<const char *> names) {
++        for (const char *name : names) {
++            if (mime.inherits(QLatin1String(name))) {
++                return true;
++            }
++        }
++        return false;
++    };
++
++    if (mimeName.startsWith(QLatin1String("image/"))) {
++        return image;
++    }
++    if (mimeName.startsWith(QLatin1String("audio/"))) {
++        return audio;
++    }
++    if (mimeName.startsWith(QLatin1String("video/"))) {
++        return video;
++    }
++    if (inheritsAny({"application/x-executable", "application/x-pie-executable", "application/vnd.appimage"})) {
++        return executable;
++    }
++    if (inheritsAny({"text/x-script", "application/x-shellscript", "text/x-python", "application/x-perl", "application/x-ruby"})) {
++        return script;
++    }
++    if (inheritsAny({"application/zip", "application/x-tar", "application/gzip", "application/zstd", "application/x-xz",
++                     "application/x-bzip2", "application/x-7z-compressed", "application/vnd.rar"})) {
++        return archive;
++    }
++    if (inheritsAny({"application/pdf", "application/msword", "application/epub+zip", "text/markdown",
++                     "application/vnd.oasis.opendocument.text",
++                     "application/vnd.openxmlformats-officedocument.wordprocessingml.document"})) {
++        return document;
++    }
++    if (mimeName == QLatin1String("application/x-zerosize")
++        || mimeName == QLatin1String("inode/x-empty")
++        || mime.inherits(QLatin1String("text/plain"))) {
++        return text;
++    }
++    if (mimeName == QLatin1String("application/octet-stream")) {
++        return binaryData;
++    }
++
++    return {};
++}
++
+ int KFileItemListWidget::selectionLength(const QString &text) const
+ {
+     // If item is a directory, use the whole text length for
+diff --color -ruN -x build -x .git /tmp/pristine/src/kitemviews/kfileitemlistwidget.h source/src/kitemviews/kfileitemlistwidget.h
+--- /tmp/pristine/src/kitemviews/kfileitemlistwidget.h	2026-11-03 06:53:13.000000000 +0300
++++ source/src/kitemviews/kfileitemlistwidget.h	2026-11-26 15:48:38.361292081 +0300
+@@ -69,6 +69,11 @@
+      */
+     int selectionLength(const QString &text) const override;
+ 
++     /**
++     * @return Filename colours (unselected, selected) for the item's MIME category.
++     *         Both are invalid if the item belongs to no category.
++     */
++    QPair<QColor, QColor> mimeCategoryColors() const;
+ private:
+     KFileItemListView *listView();
+ };
+diff --color -ruN -x build -x .git /tmp/pristine/src/kitemviews/kfileitemmodel.cpp source/src/kitemviews/kfileitemmodel.cpp
+--- /tmp/pristine/src/kitemviews/kfileitemmodel.cpp	2026-11-03 06:53:13.000000000 +0300
++++ source/src/kitemviews/kfileitemmodel.cpp	2026-11-26 15:45:30.070913873 +0300
+@@ -2207,6 +2207,7 @@
+         data.insert(sharedValue("isHidden"), item.isHidden() || item.currentMimeType().name() == QStringLiteral("application/x-trash"));
+     }
+ 
++    data.insert(sharedValue("mimeType"), item.currentMimeType().name());
+     if (m_requestRole[NameRole]) {
+         data.insert(sharedValue("text"), item.text());
+     }
+diff --color -ruN -x build -x .git /tmp/pristine/src/kitemviews/kfileitemmodelrolesupdater.cpp source/src/kitemviews/kfileitemmodelrolesupdater.cpp
+--- /tmp/pristine/src/kitemviews/kfileitemmodelrolesupdater.cpp	2026-11-03 06:53:13.000000000 +0300
++++ source/src/kitemviews/kfileitemmodelrolesupdater.cpp	2026-11-26 16:06:22.676815100 +0300
+@@ -1243,6 +1243,8 @@
+             data.insert("iconName", item.iconName());
+         }
+ 
++        data.insert("mimeType", item.currentMimeType().name());
++
+         if (m_clearPreviews) {
+             data.insert("iconPixmap", QPixmap());
+             data.insert("hoverSequencePixmaps", QVariant::fromValue(QVector<QPixmap>()));
+diff --color -ruN -x build -x .git /tmp/pristine/src/kitemviews/kstandarditemlistwidget.cpp source/src/kitemviews/kstandarditemlistwidget.cpp
+--- /tmp/pristine/src/kitemviews/kstandarditemlistwidget.cpp	2026-11-03 06:53:13.000000000 +0300
++++ source/src/kitemviews/kstandarditemlistwidget.cpp	2026-11-26 17:06:51.124760720 +0300
+@@ -715,10 +715,21 @@
+     }
+ }
+ 
++void KStandardItemListWidget::setSelectedTextColor(const QColor &color)
++{
++    if (color != m_customSelectedTextColor) {
++        m_customSelectedTextColor = color;
++        update();
++    }
++}
++
+ QColor KStandardItemListWidget::textColor(const QWidget &widget) const
+ {
++    if (isSelected() && m_customSelectedTextColor.isValid()) {
++        return m_customSelectedTextColor;
++    }
+     if (!isSelected()) {
+-        if (m_isHidden) {
++        if (m_isHidden && !m_customTextColor.isValid()) {
+             return m_additionalInfoTextColor;
+         } else if (m_customTextColor.isValid()) {
+             return m_customTextColor;
+diff --color -ruN -x build -x .git /tmp/pristine/src/kitemviews/kstandarditemlistwidget.h source/src/kitemviews/kstandarditemlistwidget.h
+--- /tmp/pristine/src/kitemviews/kstandarditemlistwidget.h	2026-11-03 06:53:13.000000000 +0300
++++ source/src/kitemviews/kstandarditemlistwidget.h	2026-11-26 15:30:15.150837093 +0300
+@@ -156,6 +156,7 @@
+     virtual QPalette::ColorRole normalTextColorRole() const;
+ 
+     void setTextColor(const QColor &color);
++    void setSelectedTextColor(const QColor &color);
+     QColor textColor(const QWidget &widget) const;
+ 
+     void setOverlays(QHash<Qt::Corner, QString> &overlay);
+@@ -297,6 +298,7 @@
+     QRectF m_expansionArea;
+ 
+     QColor m_customTextColor;
++    QColor m_customSelectedTextColor;    
+     QColor m_additionalInfoTextColor;
+ 
+     QHash<Qt::Corner, QString> m_overlays;
+diff --color -ruN -x build -x .git /tmp/pristine/src/panels/places/placespanel.cpp source/src/panels/places/placespanel.cpp
+--- /tmp/pristine/src/panels/places/placespanel.cpp	2026-11-03 06:53:13.000000000 +0300
++++ source/src/panels/places/placespanel.cpp	2026-11-26 16:32:17.273547816 +0300
+@@ -23,6 +23,7 @@
+ #include <KLocalizedString>
+ #include <KProtocolManager>
+ 
++#include <QPalette>
+ #include <QIcon>
+ #include <QMenu>
+ #include <QMimeData>
+@@ -83,6 +84,17 @@
+     for (int i = 0; i < model()->rowCount(); ++i) {
+         connectDeviceSignals(model()->index(i, 0, QModelIndex()));
+     }
++
++    QPalette placesPalette = palette();
++    const QColor placesGold(QStringLiteral("#FFD166"));
++    const QColor placesGoldSelected(QStringLiteral("#FFE08A"));
++    for (const QPalette::ColorGroup group : {QPalette::Active, QPalette::Inactive, QPalette::Disabled}) {
++        placesPalette.setColor(group, QPalette::Text, placesGold);
++        placesPalette.setColor(group, QPalette::WindowText, placesGold);
++        placesPalette.setColor(group, QPalette::ButtonText, placesGold);
++        placesPalette.setColor(group, QPalette::HighlightedText, placesGoldSelected);
++    }
++    setPalette(placesPalette);
+ }
+ 
+ PlacesPanel::~PlacesPanel() = default;
+diff --color -ruN -x build -x .git /tmp/pristine/src/views/dolphinfileitemlistwidget.cpp source/src/views/dolphinfileitemlistwidget.cpp
+--- /tmp/pristine/src/views/dolphinfileitemlistwidget.cpp	2026-11-03 06:53:13.000000000 +0300
++++ source/src/views/dolphinfileitemlistwidget.cpp	2026-11-26 15:55:40.580063011 +0300
+@@ -21,6 +21,7 @@
+ void DolphinFileItemListWidget::refreshCache()
+ {
+     QColor color;
++    bool hasVcsTint = false;
+     const QHash<QByteArray, QVariant> values = data();
+     QHash<Qt::Corner, QString> overlays;
+     if (values.contains("version")) {
+@@ -64,6 +65,8 @@
+             break;
+         }
+ 
++        hasVcsTint = (tintColor != textColor);
++
+         color = QColor((tintColor.red() + textColor.red()) / 2,
+                        (tintColor.green() + textColor.green()) / 2,
+                        (tintColor.blue() + textColor.blue()) / 2,
+@@ -85,8 +88,18 @@
+         }
+     }
+ 
++    QColor selectedColor;
++    if (!hasVcsTint) {
++        const QPair<QColor, QColor> mimeColors = mimeCategoryColors();
++        if (mimeColors.first.isValid()) {
++            color = mimeColors.first;
++            selectedColor = mimeColors.second;
++        }
++    }
++
+     setOverlays(overlays);
+     setTextColor(color);
++    setSelectedTextColor(selectedColor);    
+     setProperty(QByteArrayLiteral("iconSize"), styleOption().iconSize);
+ }
+ 

@@ -1,0 +1,21 @@
+
+# makepkg working directories
+/src/
+/pkg/
+
+# Compiled Arch packages
+/*.pkg.tar.zst
+/*.pkg.tar.zst.sig
+
+# Downloaded upstream KDE sources
+/*.tar.xz
+/*.tar.xz.sig
+
+# Build artefacts and logs
+/build/
+*.log
+*.log.*
+
+# Temporary files
+*.tmp
+*~
